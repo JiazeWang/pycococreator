@@ -10,8 +10,8 @@ import numpy as np
 from pycococreatortools import pycococreatortools
 
 ROOT_DIR = '/research/pheng5/jzwang/data/resize_train'
-IMAGE_DIR = os.path.join(ROOT_DIR, "ISIC-2017_Test_v2_Data")
-ANNOTATION_DIR = os.path.join(ROOT_DIR, "ISIC-2017_Test_v2_Part1_GroundTruth")
+IMAGE_DIR = os.path.join(ROOT_DIR, "Train")
+ANNOTATION_DIR = os.path.join(ROOT_DIR, "Train_GroundTruth")
 
 INFO = {
     "description": "ISIC Dataset",
@@ -107,7 +107,7 @@ def main():
 
             image_id = image_id + 1
 
-    with open('{}/instances_ISIC_test.json'.format(ROOT_DIR), 'w') as output_json_file:
+    with open('{}/instances_ISIC_train.json'.format(ROOT_DIR), 'w') as output_json_file:
         json.dump(coco_output, output_json_file)
 
 
