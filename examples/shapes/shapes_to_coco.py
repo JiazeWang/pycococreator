@@ -9,12 +9,12 @@ from PIL import Image
 import numpy as np
 from pycococreatortools import pycococreatortools
 
-ROOT_DIR = 'train'
-IMAGE_DIR = os.path.join(ROOT_DIR, "shapes_train2018")
-ANNOTATION_DIR = os.path.join(ROOT_DIR, "annotations")
+ROOT_DIR = '/research/pheng5/jzwang/data/resize_train'
+IMAGE_DIR = os.path.join(ROOT_DIR, "ISIC-2017_Test_v2_Data")
+ANNOTATION_DIR = os.path.join(ROOT_DIR, "ISIC-2017_Test_v2_Part1_GroundTruth")
 
 INFO = {
-    "description": "Example Dataset",
+    "description": "ISIC Dataset",
     "url": "https://github.com/waspinator/pycococreator",
     "version": "0.1.0",
     "year": 2018,
@@ -33,17 +33,7 @@ LICENSES = [
 CATEGORIES = [
     {
         'id': 1,
-        'name': 'square',
-        'supercategory': 'shape',
-    },
-    {
-        'id': 2,
-        'name': 'circle',
-        'supercategory': 'shape',
-    },
-    {
-        'id': 3,
-        'name': 'triangle',
+        'name': 'cancer',
         'supercategory': 'shape',
     },
 ]
@@ -53,11 +43,11 @@ def filter_for_jpeg(root, files):
     file_types = r'|'.join([fnmatch.translate(x) for x in file_types])
     files = [os.path.join(root, f) for f in files]
     files = [f for f in files if re.match(file_types, f)]
-    
+
     return files
 
 def filter_for_annotations(root, files, image_filename):
-    file_types = ['*.png']
+    file_types = ['*.jpg']
     file_types = r'|'.join([fnmatch.translate(x) for x in file_types])
     basename_no_extension = os.path.splitext(os.path.basename(image_filename))[0]
     file_name_prefix = basename_no_extension + '.*'
@@ -79,7 +69,7 @@ def main():
 
     image_id = 1
     segmentation_id = 1
-    
+
     # filter for jpeg images
     for root, _, files in os.walk(IMAGE_DIR):
         image_files = filter_for_jpeg(root, files)
@@ -97,14 +87,14 @@ def main():
 
                 # go through each associated annotation
                 for annotation_filename in annotation_files:
-                    
+
                     print(annotation_filename)
                     class_id = [x['id'] for x in CATEGORIES if x['name'] in annotation_filename][0]
 
                     category_info = {'id': class_id, 'is_crowd': 'crowd' in image_filename}
                     binary_mask = np.asarray(Image.open(annotation_filename)
                         .convert('1')).astype(np.uint8)
-                    
+
                     annotation_info = pycococreatortools.create_annotation_info(
                         segmentation_id, image_id, category_info, binary_mask,
                         image.size, tolerance=2)
