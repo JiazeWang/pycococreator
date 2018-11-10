@@ -89,7 +89,8 @@ def main():
                 for annotation_filename in annotation_files:
 
                     print(annotation_filename)
-                    class_id = [x['id'] for x in CATEGORIES if x['name'] in annotation_filename][0]
+                    class_id = 1
+                    #class_id = [x['id'] for x in CATEGORIES if x['name'] in annotation_filename][0]
 
                     category_info = {'id': class_id, 'is_crowd': 'crowd' in image_filename}
                     binary_mask = np.asarray(Image.open(annotation_filename)
@@ -106,7 +107,7 @@ def main():
 
             image_id = image_id + 1
 
-    with open('{}/instances_shape_train2018.json'.format(ROOT_DIR), 'w') as output_json_file:
+    with open('{}/instances_ISIC_test.json'.format(ROOT_DIR), 'w') as output_json_file:
         json.dump(coco_output, output_json_file)
 
 
